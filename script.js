@@ -21,12 +21,12 @@
     );
   });
 })();
+
 //! Listeners
 const atualizarProdutos = document.getElementById("btnAtualizar");
 atualizarProdutos.addEventListener("click", editar);
 const cancelarAtua = document.getElementById("btnCancelar");
 cancelarAtua.addEventListener("click", cancelarAtualizacao);
-
 
 function getLocalStorage() {
   return JSON.parse(localStorage.getItem("bd_clientes")) ?? [];
@@ -118,23 +118,23 @@ function editar() {
   const codigo = document.querySelector("[name='codigo']").value;
   const fabricante = document.querySelector("[name='fabricante']").value;
   const quantidade = document.querySelector("[name='quantidade']").value;
-  const select = document.querySelector('#lucro').value;
-  const precoLucro = precoComLucro(preco,parseInt(select));
+  const select = document.querySelector("#lucro").value;
+  const precoLucro = precoComLucro(preco, parseInt(select));
   bd_clientes.forEach((elemento, index) => {
     if (elemento.codigo == codigo) {
       bd_clientes[index].nome = nome;
-      bd_clientes[index].precoCusto = formatarMoney(parseInt(preco))
-      bd_clientes[index].precoVenda = formatarMoney(precoComLucro(preco,select))
+      bd_clientes[index].precoCusto = formatarMoney(parseInt(preco));
+      bd_clientes[index].precoVenda = formatarMoney(
+        precoComLucro(preco, select)
+      );
       bd_clientes[index].fabricante = fabricante;
       bd_clientes[index].quantidade = quantidade;
-      bd_clientes[index].select = select;
-      bd_clientes[index].valorTotal = formatarMoney(
-        quantidade * precoLucro)
+      bd_clientes[index].lucro = select;
+      bd_clientes[index].valorTotal = formatarMoney(quantidade * precoLucro);
     }
-    
   });
   setLocalStorage(bd_clientes);
-  cancelarAtualizacao()
+  cancelarAtualizacao();
   atualizarTabela();
 }
 //! Função para cancelar a atualização
@@ -182,27 +182,26 @@ const feedbackCodigo = document.getElementById("feedbackCodigo");
 codigo.addEventListener("input", validarCodigo);
 
 //! Função para desabilidar o input do codigo do produto
-function disbledInput(boolean) {
-  document.querySelector("[name='codigo']").disabled = boolean;
-}
-function disabledInserir(boolean) {
-  document.querySelector("[name='inserirBtn']").disabled = boolean;
-}
+const disbledInput = (boolean) =>
+  (document.querySelector("[name='codigo']").disabled = boolean);
+
+const disabledInserir = (boolean) =>
+  (document.querySelector("[name='inserirBtn']").disabled = boolean);
+
 //! função responsavel por habilidar os botões de Atualizar e cancelar
-function adicionarBtnAtualizar() {
+const adicionarBtnAtualizar = () =>
   document.querySelector("#atualizar").classList.add("d-md-flex");
-}
-function adicionarBtnCancelar() {
+
+const adicionarBtnCancelar = () =>
   document.getElementById("cancelar").classList.add("d-md-flex");
-}
 
 //! função responsavel em desabilitar os botões atualizar e cancelar
-function retirarBtnAtualizar() {
+const retirarBtnAtualizar = () =>
   document.querySelector("#atualizar").classList.remove("d-md-flex");
-}
-function retirarBtnCancelar() {
+
+const retirarBtnCancelar = () =>
   document.querySelector("#cancelar").classList.remove("d-md-flex");
-}
+
 //! Formatação dos valores para BRL
 function formatarMoney(valores) {
   return valores.toLocaleString("pt-BR", {
