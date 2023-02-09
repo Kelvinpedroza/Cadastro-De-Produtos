@@ -54,7 +54,8 @@ function atualizarTabela() {
         <th scope="row">${index}</th>
         <td>${cliente.nome}</td>
         <td>${cliente.codigo}</td>
-        <td>${cliente.preco}</td>
+        <td>${cliente.precoCusto}</td>
+        <td>${cliente.precoVenda}</td>
         <td>${cliente.lucro} %</td>
         <td>${cliente.quantidade}</td>
         <td>${cliente.valorTotal}</td>
@@ -75,7 +76,7 @@ function inserir() {
   const cliente = {
     nome: document.getElementById("nome").value,
     codigo: document.getElementById("codigo").value,
-    preco: document.getElementById("preco").value,
+    precoCusto: document.getElementById("preco").value,
     fabricante: document.getElementById("fabricante").value,
     quantidade: document.getElementById("quantidade").value,
     lucro: document.getElementById("lucro").value,
@@ -83,9 +84,10 @@ function inserir() {
   // Declaração de variaveis
   const bd_clientes = getLocalStorage();
   // Chamada das funcões
-  cliente.preco = precoComLucro(cliente.preco, cliente.lucro);
-  cliente.valorTotal = valorTotal(cliente.preco, cliente.quantidade);
-  cliente.preco = formatarMoney(cliente.preco);
+  cliente.precoVenda = precoComLucro(cliente.precoCusto, cliente.lucro);
+  cliente.valorTotal = valorTotal(cliente.precoVenda, cliente.quantidade);
+  cliente.precoVenda = formatarMoney(cliente.precoVenda);
+  cliente.precoCusto = formatarMoney(parseInt(cliente.precoCusto));
   bd_clientes.push(cliente);
   setLocalStorage(bd_clientes);
   atualizarTabela();
@@ -95,7 +97,7 @@ function inserir() {
 function capturarValores(valor) {
   const bd_clientes = getLocalStorage();
   const alterar = bd_clientes[valor];
-  const nova = alterar.preco.replace(/[^0-9]/g, "");
+  const nova = alterar.precoCusto.replace(/[^0-9]/g, "");
 
   (document.querySelector("[name='nome']").value = alterar.nome),
     (document.querySelector("[name='preco']").value = nova.slice(0, -2)),
@@ -121,7 +123,8 @@ function editar() {
   bd_clientes.forEach((elemento, index) => {
     if (elemento.codigo == codigo) {
       bd_clientes[index].nome = nome;
-      bd_clientes[index].preco = formatarMoney(precoLucro)
+      bd_clientes[index].precoCusto = formatarMoney(parseInt(preco))
+      bd_clientes[index].precoVenda = formatarMoney(precoComLucro(preco,select))
       bd_clientes[index].fabricante = fabricante;
       bd_clientes[index].quantidade = quantidade;
       bd_clientes[index].select = select;
